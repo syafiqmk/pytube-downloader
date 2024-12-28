@@ -4,25 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Downloader Video YouTube</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Downloader Video YouTube</h1>
-        <form method="POST">
-            <label for="video_url">URL Video YouTube:</label>
-            <input type="text" id="video_url" name="video_url" required>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold text-center mb-6">Downloader Video YouTube</h1>
+        <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label for="video_url" class="block text-gray-700 text-sm font-bold mb-2">URL Video YouTube:</label>
+                <input type="text" id="video_url" name="video_url" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Masukkan URL video di sini">
+            </div>
 
-            <label for="quality">Pilih Kualitas:</label>
-            <select id="quality" name="quality">
-                <option value="highest">Tertinggi</option>
-                <option value="1080p">1080p</option>
-                <option value="720p">720p</option>
-                <option value="480p">480p</option>
-                <option value="360p">360p</option>
-            </select>
+            <div class="mb-4">
+                <label for="quality" class="block text-gray-700 text-sm font-bold mb-2">Pilih Kualitas:</label>
+                <select id="quality" name="quality" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <option value="highest">Tertinggi</option>
+                    <option value="1080p">1080p</option>
+                    <option value="720p">720p</option>
+                    <option value="480p">480p</option>
+                    <option value="360p">360p</option>
+                </select>
+            </div>
 
-            <button type="submit">Download</button>
+            <div class="flex items-center justify-center">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Download</button>
+            </div>
         </form>
     </div>
 </body>
