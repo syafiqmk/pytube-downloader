@@ -21,8 +21,9 @@ def index():
         quality = request.form['quality']
         
         # Hapus isi folder download sebelum mendownload video baru
-        shutil.rmtree(DOWNLOAD_FOLDER)
-        os.makedirs(DOWNLOAD_FOLDER)
+        for file in os.listdir(DOWNLOAD_FOLDER):
+            file_path = os.path.join(DOWNLOAD_FOLDER, file)
+            os.remove(file_path)
 
         try:
             yt = YouTube(video_url)
@@ -38,31 +39,23 @@ def index():
 
             # Logika pemilihan stream
             if quality == 'highest':
-                # Ambil stream video dengan resolusi tertinggi
                 video_stream = yt.streams.filter(progressive=False).order_by('resolution').desc().first()
             else:
-                # Mencari stream video dengan resolusi yang diminta
                 video_stream = yt.streams.filter(resolution=quality, progressive=False).first()
-
-                # Jika stream video tidak ditemukan, coba ambil stream dengan bitrate tertinggi
                 if not video_stream:
                     video_stream = yt.streams.filter(progressive=True).order_by('bitrate').desc().first()
 
-            # Selalu ambil stream audio dengan bitrate tertinggi
             audio_stream = yt.streams.filter(only_audio=True).order_by('bitrate').desc().first()
 
-            # Jika tidak ada stream video atau audio yang ditemukan, berikan pesan kesalahan
             if not video_stream or not audio_stream:
                 return "Tidak ada stream yang tersedia untuk kualitas yang dipilih."
 
-            # Mendownload video dan audio
             video_path = video_stream.download(output_path=DOWNLOAD_FOLDER)
             audio_path = audio_stream.download(output_path=DOWNLOAD_FOLDER)
 
-            # Menggabungkan video dan audio menggunakan ffmpeg
-            final_video_title = re.sub(r'[<>:"/\\|?*]', '', yt.title)  # Menghapus karakter yang tidak valid untuk nama file
-            video_quality = video_stream.resolution if video_stream.resolution else "unknown"  # Ambil resolusi video
-            final_video_path = os.path.join(DOWNLOAD_FOLDER, f"{final_video_title} - {video_quality}.mp4")  # Tambahkan kualitas video ke nama file
+            final_video_title = re.sub(r'[<>:"/\\|?*]', '', yt.title)
+            video_quality = video_stream.resolution if video_stream.resolution else "unknown"
+            final_video_path = os.path.join(DOWNLOAD_FOLDER, f"{final_video_title} - {video_quality}.mp4")
             merge_command = [
                 'ffmpeg',
                 '-i', video_path,
@@ -74,14 +67,13 @@ def index():
             ]
             subprocess.run(merge_command, check=True)
 
-            # Menghapus file sementara
             os.remove(video_path)
             os.remove(audio_path)
 
             return send_file(final_video_path, as_attachment=True)
 
         except Exception as e:
-            return f"Terjadi kesalahan: {e}"
+            return f"Terjadi kesalahan saat memproses video: {str(e)}"
 
     return render_template('index.html')
 
