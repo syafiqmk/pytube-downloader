@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloader Video YouTube</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Downloader Video YouTube</h1>
+        <form method="POST">
+            <label for="video_url">URL Video YouTube:</label>
+            <input type="text" id="video_url" name="video_url" required>
+
+            <label for="quality">Pilih Kualitas:</label>
+            <select id="quality" name="quality">
+                <option value="highest">Tertinggi</option>
+                <option value="1080p">1080p</option>
+                <option value="720p">720p</option>
+                <option value="480p">480p</option>
+                <option value="360p">360p</option>
+            </select>
+
+            <button type="submit">Download</button>
+        </form>
+    </div>
+</body>
+</html>
